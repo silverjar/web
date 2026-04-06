@@ -1,0 +1,118 @@
+<?php
+require_once 'config/db.php';
+if(!isset($_SESSION['user_id'])) header('Location: login.php');
+
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $codigo = $_POST['codigo'];
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $categoria = $_POST['categoria'];
+    $proveedor = $_POST['proveedor'];
+    $precio_compra = $_POST['precio_compra'];
+    $precio_venta = $_POST['precio_venta'];
+    $stock = $_POST['stock'];
+    $stock_minimo = $_POST['stock_minimo'];
+    $lote = $_POST['lote'];
+    $fecha_vencimiento = $_POST['fecha_vencimiento'];
+    
+    $sql = "INSERT INTO productos (codigo, nombre, descripcion, categoria, proveedor, precio_compra, precio_venta, stock, stock_minimo, lote, fecha_vencimiento) 
+            VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$codigo, $nombre, $descripcion, $categoria, $proveedor, $precio_compra, $precio_venta, $stock, $stock_minimo, $lote, $fecha_vencimiento]);
+    
+    header('Location: products.php');
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Producto</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">🏥 Farmacia</div>
+        <nav>
+            <a href="dashboard.php">📊 Dashboard</a>
+            <a href="products.php">💊 Productos</a>
+            <a href="sales.php">💰 Ventas</a>
+            <a href="logout.php">🚪 Cerrar Sesión</a>
+        </nav>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>➕ Nuevo Producto</h2>
+            <a href="products.php" class="btn-secondary">← Volver</a>
+        </div>
+        
+        <div class="card">
+            <form method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Código *</label>
+                        <input type="text" name="codigo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea name="descripcion" rows="3"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <input type="text" name="categoria" placeholder="Ej: Analgésicos">
+                    </div>
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <input type="text" name="proveedor">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Precio Compra</label>
+                        <input type="number" step="0.01" name="precio_compra" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Venta</label>
+                        <input type="number" step="0.01" name="precio_venta" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Stock Inicial</label>
+                        <input type="number" name="stock" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Stock Mínimo</label>
+                        <input type="number" name="stock_minimo" value="10">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Lote</label>
+                        <input type="text" name="lote">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Vencimiento</label>
+                        <input type="date" name="fecha_vencimiento">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary">💾 Guardar Producto</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
